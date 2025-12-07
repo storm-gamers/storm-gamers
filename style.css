@@ -55,9 +55,8 @@ body, html {
     box-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
 }
 
-/* ENTER BUTTON */
-/* ENTER BUTTON - ENCHANTED VERSION */
-.enter-btn {
+/* 🚀 NEW FINAL ENTER BUTTON STYLE (Applies to your <button>) */
+button {
     width: 100%;
     padding: 16px;
     margin-top: 15px;
@@ -67,33 +66,49 @@ body, html {
     font-weight: bold;
     cursor: pointer;
     color: #fff;
+    
     background: linear-gradient(270deg, #ff00ff, #00ffff, #ff00ff);
     background-size: 600% 600%;
+
     text-shadow: 0 0 8px #000;
-    box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff;
+
+    box-shadow: 
+        0 0 15px #ff00ff,
+        0 0 30px #00ffff;
+
     transition: all 0.3s ease;
-    animation: gradientShift 3s ease infinite, glowPulse 1.5s ease-in-out infinite alternate;
+
+    animation: gradientShift 3s ease infinite,
+               glowPulse 1.5s ease-in-out infinite alternate;
 }
 
-/* Gradient moving effect */
+/* Gradient movement */
 @keyframes gradientShift {
     0% {background-position: 0% 50%;}
     50% {background-position: 100% 50%;}
     100% {background-position: 0% 50%;}
 }
 
-/* Pulsing glow */
+/* Glow pulsing */
 @keyframes glowPulse {
-    0% { box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; transform: scale(1);}
-    50% { box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff; transform: scale(1.05);}
-    100% { box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; transform: scale(1);}
+    0% { 
+        box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff;
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+        transform: scale(1.05);
+    }
+    100% { 
+        box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff;
+        transform: scale(1);
+    }
 }
 
-.enter-btn:hover {
+button:hover {
     transform: scale(1.1);
     box-shadow: 0 0 40px #ff00ff, 0 0 80px #00ffff;
 }
-
 
 /* CANVAS BACKGROUND */
 canvas {
@@ -104,4 +119,5 @@ canvas {
 }
 
   
+
 
