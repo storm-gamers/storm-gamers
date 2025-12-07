@@ -1,5 +1,4 @@
 // ---------------- LOGIN + GOOGLE SHEET ----------------
-
 const form = document.getElementById('loginForm');
 
 form.addEventListener('submit', e => {
@@ -21,15 +20,9 @@ form.addEventListener('submit', e => {
     })
     .then(() => {
         alert("Welcome to the portal, warrior!");
-
-        // Hide only the login box
         document.querySelector(".login-box").style.display = "none";
-
-        // Show the snake game
-        document.getElementById("snakeGame").style.display = "block";
-
-        // Start the snake game
-        startSnake();
+        document.getElementById("gameContainer").style.display = "block";
+        startGame();
     })
     .catch(err => {
         console.log(err);
@@ -37,95 +30,75 @@ form.addEventListener('submit', e => {
     });
 });
 
-
-// ---------------- INFINITE SNAKE GAME WITH SPEED ----------------
-
-function startSnake() {
-    const canvas = document.getElementById("snakeCanvas");
+// ---------------- FLAPPY BIRD GAME ----------------
+function startGame() {
+    const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    const width = canvas.width;
+    const height = canvas.height;
 
-    let box = 15;
-    let snake = [{ x: 9 * box, y: 9 * box }];
-    let food = randomFood();
+    let bird = { x: 50, y: height/2, width: 30, height: 30, dy: 0 };
+    const gravity = 0.6;
+    const flap = -10;
+
+    let pipes = [];
+    const pipeWidth = 60;
+    const pipeGap = 150;
+    let pipeSpeed = 2;
+
     let score = 0;
-    let direction = "RIGHT";
-    let speed = 150; // initial interval (ms)
-    let gameInterval;
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-        else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-        else if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-        else if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-    });
+    document.addEventListener('keydown', e => { if(e.code==="Space") bird.dy = flap; });
+    document.addEventListener('mousedown', e => { bird.dy = flap; });
 
-    function randomFood() {
-        return {
-            x: Math.floor(Math.random() * 20) * box,
-            y: Math.floor(Math.random() * 20) * box
-        };
+    function createPipe() {
+        let topHeight = Math.random() * (height - pipeGap - 50) + 25;
+        pipes.push({ x: width, top: topHeight, bottom: height - topHeight - pipeGap });
     }
 
-    function resetSnake() {
-        snake = [{ x: 9 * box, y: 9 * box }];
-        direction = "RIGHT";
+    function resetGame() {
+        bird = { x: 50, y: height/2, width: 30, height: 30, dy: 0 };
+        pipes = [];
         score = 0;
-        speed = 150; // reset speed
-        food = randomFood();
-        document.getElementById("snakeScore").innerText = "Score: 0";
-
-        clearInterval(gameInterval);
-        gameInterval = setInterval(draw, speed);
+        pipeSpeed = 2;
+        document.getElementById("gameScore").innerText = "Score: 0";
     }
 
     function draw() {
         ctx.fillStyle = "#111";
-        ctx.fillRect(0, 0, 300, 300);
+        ctx.fillRect(0, 0, width, height);
 
-        // Draw snake
+        bird.dy += gravity;
+        bird.y += bird.dy;
         ctx.fillStyle = "#0ff";
-        snake.forEach(s => ctx.fillRect(s.x, s.y, box, box));
+        ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
 
-        // Draw food
-        ctx.fillStyle = "yellow";
-        ctx.fillRect(food.x, food.y, box, box);
+        if(Math.random() < 0.02) createPipe();
+        for(let i=0;i<pipes.length;i++){
+            let p = pipes[i];
+            p.x -= pipeSpeed;
 
-        // Move snake
-        let head = { ...snake[0] };
-        if (direction === "UP") head.y -= box;
-        if (direction === "DOWN") head.y += box;
-        if (direction === "LEFT") head.x -= box;
-        if (direction === "RIGHT") head.x += box;
+            ctx.fillStyle = "#ff00ff";
+            ctx.fillRect(p.x, 0, pipeWidth, p.top);
+            ctx.fillStyle = "#00ffff";
+            ctx.fillRect(p.x, height-p.bottom, pipeWidth, p.bottom);
 
-        // Check collisions
-        let hitWall = head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300;
-        let hitSelf = snake.some(s => s.x === head.x && s.y === head.y);
+            if(bird.x < p.x + pipeWidth && bird.x + bird.width > p.x &&
+               (bird.y < p.top || bird.y + bird.height > height - p.bottom)) {
+                   resetGame(); return;
+               }
 
-        if (hitWall || hitSelf) {
-            alert("💀 You crashed! Snake reset!");
-            resetSnake();
-            return;
-        }
-
-        snake.unshift(head);
-
-        // Eat food
-        if (head.x === food.x && head.y === food.y) {
-            score++;
-            document.getElementById("snakeScore").innerText = "Score: " + score;
-            food = randomFood();
-
-            // Increase speed every 3 points
-            if (score % 3 === 0 && speed > 50) {
-                speed -= 10; // speed up
-                clearInterval(gameInterval);
-                gameInterval = setInterval(draw, speed);
+            if(!p.scored && p.x + pipeWidth < bird.x){
+                score++; p.scored=true;
+                document.getElementById("gameScore").innerText = "Score: " + score;
+                if(score%5===0) pipeSpeed+=0.5;
             }
-        } else {
-            snake.pop();
         }
+
+        if(bird.y + bird.height > height || bird.y < 0) { resetGame(); return; }
+
+        requestAnimationFrame(draw);
     }
 
-    // Start the game
-    gameInterval = setInterval(draw, speed);
+    draw();
 }
