@@ -1,0 +1,45 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+    height: 100%;
+    background: #0f0f0f;
+    color: #fff;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background: rgba(0,0,0,0.9);
+    padding: 40px;
+    border-radius: 15px;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+    width: 360px;
+    text-align: center;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; }
+    100% { box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff; }
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    color: white;
+    border: none;
+    outline: none;
+}
