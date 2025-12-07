@@ -38,7 +38,7 @@ form.addEventListener('submit', e => {
 });
 
 
-// ---------------- SNAKE GAME LOGIC ----------------
+// ---------------- INFINITE SNAKE GAME ----------------
 
 function startSnake() {
     const canvas = document.getElementById("snakeCanvas");
@@ -50,7 +50,6 @@ function startSnake() {
     let score = 0;
     let direction = "RIGHT";
 
-    // Controls
     document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
         else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
@@ -65,49 +64,53 @@ function startSnake() {
         };
     }
 
+    function resetSnake() {
+        snake = [{ x: 9 * box, y: 9 * box }];
+        direction = "RIGHT";
+        score = 0;
+        food = randomFood();
+        document.getElementById("snakeScore").innerText = "Score: 0";
+    }
+
     function draw() {
-        // Background
         ctx.fillStyle = "#111";
         ctx.fillRect(0, 0, 300, 300);
 
-        // Snake
+        // Draw snake
         ctx.fillStyle = "#0ff";
         snake.forEach(s => ctx.fillRect(s.x, s.y, box, box));
 
-        // Food
+        // Draw food
         ctx.fillStyle = "yellow";
         ctx.fillRect(food.x, food.y, box, box);
 
-        // Movement
+        // Move snake
         let head = { ...snake[0] };
-
         if (direction === "UP") head.y -= box;
         if (direction === "DOWN") head.y += box;
         if (direction === "LEFT") head.x -= box;
         if (direction === "RIGHT") head.x += box;
 
-        // Wall crash
-        if (head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300) {
-            alert("Bruh 💀 Snake crashed! Reload and try again.");
-            location.reload();
+        // Check collisions with wall or self
+        let hitWall = head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300;
+        let hitSelf = snake.some(s => s.x === head.x && s.y === head.y);
+
+        if (hitWall || hitSelf) {
+            alert("💀 You crashed! Snake reset!");
+            resetSnake();
+            return;
         }
+
+        snake.unshift(head);
 
         // Eat food
         if (head.x === food.x && head.y === food.y) {
             score++;
             document.getElementById("snakeScore").innerText = "Score: " + score;
-
-            if (score >= 5) {
-                alert("🔥 Portal Unlocked, Napolean Warrior!");
-                window.location.href = "home.html"; 
-            }
-
             food = randomFood();
         } else {
             snake.pop();
         }
-
-        snake.unshift(head);
     }
 
     setInterval(draw, 120);
