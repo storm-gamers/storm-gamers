@@ -38,7 +38,7 @@ form.addEventListener('submit', e => {
 });
 
 
-// ---------------- INFINITE SNAKE GAME ----------------
+// ---------------- INFINITE SNAKE GAME WITH SPEED ----------------
 
 function startSnake() {
     const canvas = document.getElementById("snakeCanvas");
@@ -49,6 +49,8 @@ function startSnake() {
     let food = randomFood();
     let score = 0;
     let direction = "RIGHT";
+    let speed = 150; // initial interval (ms)
+    let gameInterval;
 
     document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
@@ -68,8 +70,12 @@ function startSnake() {
         snake = [{ x: 9 * box, y: 9 * box }];
         direction = "RIGHT";
         score = 0;
+        speed = 150; // reset speed
         food = randomFood();
         document.getElementById("snakeScore").innerText = "Score: 0";
+
+        clearInterval(gameInterval);
+        gameInterval = setInterval(draw, speed);
     }
 
     function draw() {
@@ -91,7 +97,7 @@ function startSnake() {
         if (direction === "LEFT") head.x -= box;
         if (direction === "RIGHT") head.x += box;
 
-        // Check collisions with wall or self
+        // Check collisions
         let hitWall = head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300;
         let hitSelf = snake.some(s => s.x === head.x && s.y === head.y);
 
@@ -108,10 +114,18 @@ function startSnake() {
             score++;
             document.getElementById("snakeScore").innerText = "Score: " + score;
             food = randomFood();
+
+            // Increase speed every 3 points
+            if (score % 3 === 0 && speed > 50) {
+                speed -= 10; // speed up
+                clearInterval(gameInterval);
+                gameInterval = setInterval(draw, speed);
+            }
         } else {
             snake.pop();
         }
     }
 
-    setInterval(draw, 120);
+    // Start the game
+    gameInterval = setInterval(draw, speed);
 }
