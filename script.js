@@ -82,3 +82,4 @@ canvas {
     left: 0;
     z-index: 1;
 }
+
