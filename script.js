@@ -8,7 +8,7 @@ form.addEventListener('submit', e => {
         password: form.password.value
     };
     
-    fetch("YOUR_WEB_APP_URL", {
+    fetch("https://script.google.com/macros/s/AKfycby0FlDiGBUvB6y2S_Idhos4zmyHek8CkPO4GBDmHzE168C_MGOzuZjYRZf8Q9yjEKYS/exec", {
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -25,3 +25,4 @@ form.addEventListener('submit', e => {
         alert("Error saving data.");
     });
 });
+
