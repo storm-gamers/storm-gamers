@@ -1,3 +1,5 @@
+// ---------------- LOGIN + GOOGLE SHEET ----------------
+
 const form = document.getElementById('loginForm');
 
 form.addEventListener('submit', e => {
@@ -19,13 +21,14 @@ form.addEventListener('submit', e => {
     })
     .then(() => {
         alert("Welcome to the portal, warrior!");
-        form.reset();
 
-        // HIDE LOGIN + SHOW SNAKE GAME
-        document.querySelector(".container").style.display = "none";
+        // Hide only the login box
+        document.querySelector(".login-box").style.display = "none";
+
+        // Show the snake game
         document.getElementById("snakeGame").style.display = "block";
 
-        // START SNAKE
+        // Start the snake game
         startSnake();
     })
     .catch(err => {
@@ -34,3 +37,78 @@ form.addEventListener('submit', e => {
     });
 });
 
+
+// ---------------- SNAKE GAME LOGIC ----------------
+
+function startSnake() {
+    const canvas = document.getElementById("snakeCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let box = 15;
+    let snake = [{ x: 9 * box, y: 9 * box }];
+    let food = randomFood();
+    let score = 0;
+    let direction = "RIGHT";
+
+    // Controls
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+        else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+        else if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+        else if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+    });
+
+    function randomFood() {
+        return {
+            x: Math.floor(Math.random() * 20) * box,
+            y: Math.floor(Math.random() * 20) * box
+        };
+    }
+
+    function draw() {
+        // Background
+        ctx.fillStyle = "#111";
+        ctx.fillRect(0, 0, 300, 300);
+
+        // Snake
+        ctx.fillStyle = "#0ff";
+        snake.forEach(s => ctx.fillRect(s.x, s.y, box, box));
+
+        // Food
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(food.x, food.y, box, box);
+
+        // Movement
+        let head = { ...snake[0] };
+
+        if (direction === "UP") head.y -= box;
+        if (direction === "DOWN") head.y += box;
+        if (direction === "LEFT") head.x -= box;
+        if (direction === "RIGHT") head.x += box;
+
+        // Wall crash
+        if (head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300) {
+            alert("Bruh 💀 Snake crashed! Reload and try again.");
+            location.reload();
+        }
+
+        // Eat food
+        if (head.x === food.x && head.y === food.y) {
+            score++;
+            document.getElementById("snakeScore").innerText = "Score: " + score;
+
+            if (score >= 5) {
+                alert("🔥 Portal Unlocked, Napolean Warrior!");
+                window.location.href = "home.html"; 
+            }
+
+            food = randomFood();
+        } else {
+            snake.pop();
+        }
+
+        snake.unshift(head);
+    }
+
+    setInterval(draw, 120);
+}
