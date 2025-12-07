@@ -56,24 +56,44 @@ body, html {
 }
 
 /* ENTER BUTTON */
+/* ENTER BUTTON - ENCHANTED VERSION */
 .enter-btn {
     width: 100%;
-    padding: 14px;
+    padding: 16px;
     margin-top: 15px;
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(90deg, #ff00ff, #00ffff);
-    color: #fff;
-    font-size: 18px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
+    color: #fff;
+    background: linear-gradient(270deg, #ff00ff, #00ffff, #ff00ff);
+    background-size: 600% 600%;
+    text-shadow: 0 0 8px #000;
+    box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff;
     transition: all 0.3s ease;
-    text-shadow: 0 0 5px #000;
+    animation: gradientShift 3s ease infinite, glowPulse 1.5s ease-in-out infinite alternate;
+}
+
+/* Gradient moving effect */
+@keyframes gradientShift {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* Pulsing glow */
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; transform: scale(1);}
+    50% { box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff; transform: scale(1.05);}
+    100% { box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; transform: scale(1);}
 }
 
 .enter-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+    transform: scale(1.1);
+    box-shadow: 0 0 40px #ff00ff, 0 0 80px #00ffff;
 }
+
 
 /* CANVAS BACKGROUND */
 canvas {
@@ -84,3 +104,4 @@ canvas {
 }
 
   
+
