@@ -1,4 +1,5 @@
 const form = document.getElementById('loginForm');
+
 form.addEventListener('submit', e => {
     e.preventDefault();
     
@@ -19,6 +20,13 @@ form.addEventListener('submit', e => {
     .then(() => {
         alert("Welcome to the portal, warrior!");
         form.reset();
+
+        // HIDE LOGIN + SHOW SNAKE GAME
+        document.querySelector(".container").style.display = "none";
+        document.getElementById("snakeGame").style.display = "block";
+
+        // START SNAKE
+        startSnake();
     })
     .catch(err => {
         console.log(err);
