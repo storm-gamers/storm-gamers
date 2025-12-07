@@ -18,9 +18,23 @@
             </form>
             <p>Powered by Napolean Warrior ⚔️</p>
         </div>
+<!-- SNAKE GAME SECTION (Hidden at Start) -->
+<div id="snakeGame" style="display:none; text-align:center; margin-top:20px;">
+    <h2>Snake Game 🐍</h2>
+    <p>Score 5 points to enter the site!</p>
+
+    <canvas id="snakeCanvas" width="300" height="300" 
+        style="background:#111; border:3px solid #00ffff; border-radius:10px; margin-top:10px;">
+    </canvas>
+
+    <h3 id="snakeScore" style="color:#0ff; margin-top:10px;">Score: 0</h3>
+</div>
+
+        
     </div>
     <canvas id="background"></canvas>
     <script src="script.js"></script>
     <script src="particles.js"></script>
 </body>
 </html>
+
