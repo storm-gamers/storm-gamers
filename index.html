@@ -1,43 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Portal Login</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Portal Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="container">
-        <div class="login-box">
-            <h1>⚡ GAME PORTAL ⚡</h1>
-
-            <form id="loginForm">
-                <input type="text" name="name" placeholder="Enter Your Name" required>
-                <input type="email" name="email" placeholder="Enter Your Email" required>
-                <input type="password" name="password" placeholder="Enter Password" required>
-                <button type="submit">Enter</button>
-            </form>
-
-            <p>Powered by Napolean Warrior ⚔️</p>
-        </div>
-
-        <!-- FLAPPY BIRD GAME SECTION (Hidden at Start) -->
-        <div id="gameContainer" style="display:none; text-align:center; margin-top:20px;">
-            <h2>Flappy Bird 🕊️</h2>
-            <p>Tap anywhere or use FLAP button to fly.</p>
-
-            <h3 id="gameScore" style="color:#0ff; margin-top:10px;">Score: 0</h3>
-        </div>
+  <div class="container">
+    <div class="login-box" id="loginBox">
+      <h1>⚡ GAME PORTAL ⚡</h1>
+      <form id="loginForm">
+        <input type="text" name="name" placeholder="Enter Your Name" required>
+        <input type="email" name="email" placeholder="Enter Your Email" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Enter</button>
+      </form>
+      <p>Powered by Napolean Warrior ⚔️</p>
     </div>
+    <div id="gameContainer" style="display:none; text-align:center;">
+      <!-- We will load the clone inside here -->
+      <div id="flappyWrapper"></div>
+    </div>
+  </div>
 
-    <canvas id="background"></canvas>
+  <canvas id="background"></canvas>
 
-    <!-- p5.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <!-- Script to handle login + inject clone -->
+  <script>
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      // you can keep your fetch / Google-Sheet logic if needed...
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('gameContainer').style.display = 'block';
 
-    <!-- Your scripts -->
-    <script src="script.js"></script>
-    <script src="particles.js"></script>
+      // Load the clone’s HTML via fetch and inject
+      fetch('https://raw.githubusercontent.com/nidhiupman568/FLAPPY-BIRD-GAME/main/index.html')
+      .then(res => res.text())
+      .then(html => {
+        const wrapper = document.getElementById('flappyWrapper');
+        // strip <!DOCTYPE>, <html>, <head>, <body> tags and take only body content
+        const bodyContent = html.split('<body')[1].split('</body>')[0];
+        wrapper.innerHTML = bodyContent;
+
+        // load its CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://raw.githubusercontent.com/nidhiupman568/FLAPPY-BIRD-GAME/main/flappybird.css';
+        document.head.appendChild(link);
+
+        // load its JS
+        const script = document.createElement('script');
+        script.src = 'https://raw.githubusercontent.com/nidhiupman568/FLAPPY-BIRD-GAME/main/flappybird.js';
+        document.body.appendChild(script);
+      })
+      .catch(err => {
+        console.error('Failed to load game clone', err);
+      });
+    });
+  </script>
 </body>
 </html>
