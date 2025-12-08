@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,33 +6,37 @@
     <title>Game Portal Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <div class="login-box">
             <h1>⚡ GAME PORTAL ⚡</h1>
+
             <form id="loginForm">
                 <input type="text" name="name" placeholder="Enter Your Name" required>
                 <input type="email" name="email" placeholder="Enter Your Email" required>
                 <input type="password" name="password" placeholder="Enter Password" required>
                 <button type="submit">Enter</button>
             </form>
+
             <p>Powered by Napolean Warrior ⚔️</p>
         </div>
 
         <!-- FLAPPY BIRD GAME SECTION (Hidden at Start) -->
         <div id="gameContainer" style="display:none; text-align:center; margin-top:20px;">
             <h2>Flappy Bird 🕊️</h2>
-            <p>Try to stay alive! Press Space or Tap to flap.</p>
-
-            <canvas id="gameCanvas" width="400" height="500"
-                style="background:#111; border:3px solid #00ffff; border-radius:10px; margin-top:10px;">
-            </canvas>
+            <p>Tap anywhere or use FLAP button to fly.</p>
 
             <h3 id="gameScore" style="color:#0ff; margin-top:10px;">Score: 0</h3>
         </div>
     </div>
 
     <canvas id="background"></canvas>
+
+    <!-- p5.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+
+    <!-- Your scripts -->
     <script src="script.js"></script>
     <script src="particles.js"></script>
 </body>
